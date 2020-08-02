@@ -142,7 +142,7 @@ class App extends Component {
     return (
       <div className='App' >
         <h2>API steps to follow:</h2>
-        <p>1. <button onClick={() => this.createCardProduct()}>Create virtual card</button></p>
+        <p>1. <button onClick={() => this.createCardProduct()}>Create card product definition</button></p>
         <p>2. <button onClick={() => this.createProgramFundingResource()}>Create program funding resource</button></p>
         <p>3. <button onClick={() => this.createUser()}>Create user</button></p>
         <p>4. <button onClick={() => this.createVelocityControls()}>Create velocity controls</button></p>
