@@ -6,11 +6,17 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cardProductData: null,
-      cardProductToken: ''
+      cardProductToken: '',
+      MCCGroupDataToken: '',
+      programFundingResourceToken: '',
+      userDataToken: '',
+      cardDataToken: '',
+      velocityControlsDataToken: '',
+      fundUserAccountDataToken: ''
     };
   }
 
+  // Step 1 handler
   handleCreateCardProduct() {
 
     const cardProductData = {
@@ -131,9 +137,249 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(cardProductData => {
+        this.setState({ cardProductToken: cardProductData.token });
         console.log('Card Product Data Response:', cardProductData);
+        console.log('Card Product Token:', cardProductData.token);
       })
-      .then(cardProductData => this.setState({ cardProductToken: cardProductData.token }))
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 2 handler
+  handleCreateMCCGroup() {
+
+    const MCCGroupData = {
+      name: 'google_facebook_spends',
+      mccs: [
+        "0123"
+      ],
+      active: true,
+      config: {
+        authorization_controls: {
+          hold_increase: {
+            type: 'AMOUNT',
+            value: 10
+          },
+          hold_expiration_days: 10
+        }
+      }
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/mccgroups', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(MCCGroupData),
+    })
+      .then(response => response.json())
+      .then(MCCGroupData => {
+        this.setState({ MCCGroupDataToken: MCCGroupData.token });
+        console.log('MCC Group Data Response:', MCCGroupData);
+        console.log('MCC Group Data Token:', MCCGroupData.token);
+
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 3 handler
+  handleCreateProgramFundingResource() {
+
+    const programFundingResourceData = {
+      name: 'Program Funding'
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/fundingsources/program', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(programFundingResourceData),
+    })
+      .then(response => response.json())
+      .then(programFundingResourceData => {
+        this.setState({ cardProductToken: programFundingResourceData.token });
+        console.log('Program Funding Resource Data Response:', programFundingResourceData);
+        console.log('Program Funding Resource Data Token:', programFundingResourceData.token);
+
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 4 handler
+  handleCreateUser() {
+
+    const userData = {
+      first_name: 'Sean',
+      last_name: 'Van Ho',
+      active: true
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(userData),
+    })
+      .then(response => response.json())
+      .then(userData => {
+        this.setState({ userDataToken: userData.token });
+        console.log('User Data Response:', userData);
+        console.log('User Data Token:', userData.token);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 5 handler
+  handleCreateCard() {
+
+    const cardData = {
+      card_product_token: '**TOKEN**',
+      expedite: false,
+      expiration_offset: {
+        unit: 'YEARS',
+        value: 0
+      },
+      user_token: '**TOKEN**',
+      fulfillment: {
+        shipping: {
+          method: 'FEDEX_EXPEDITED',
+          return_address: {
+            first_name: 'Sean',
+            last_name: 'Van Ho',
+            address1: '50 Beale St',
+            address2: 'Fl 7',
+            city: 'San Francisco',
+            state: 'CA',
+            zip: '94105',
+            country: 'US',
+            phone: '555-555-5555',
+            postal_code: '94105'
+          },
+          recipient_address: {
+            first_name: 'Sean',
+            last_name: 'Van Ho',
+            address1: '50 Beale St',
+            address2: 'Fl 7',
+            city: 'San Francisco',
+            state: 'CA',
+            zip: '94105',
+            country: 'US',
+            phone: '555-555-5555',
+            postal_code: '94105'
+          },
+          care_of_line: ''
+        },
+        card_fulfillment_reason: 'NEW'
+      },
+      activation_actions: {
+        terminate_reissued_source_card: false,
+        swap_digital_wallet_tokens_from_card_token: ''
+      }
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/cards', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(cardData),
+    })
+      .then(response => response.json())
+      .then(cardData => {
+        this.setState({ cardDataToken: cardData.token });
+        console.log('Card Data Response:', cardData);
+        console.log('Card Data Token:', cardData.token);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 6 handler
+  handleCreateVelocityControls() {
+
+    const velocityControlsData = {
+      name: 'google_facebook',
+      association: {
+        card_product_token: '**TOKEN**'
+      },
+      merchant_scope: {
+        mcc_group: '**TOKEN**'
+      },
+      approvals_only: false,
+      include_purchases: true,
+      include_withdrawals: false,
+      include_transfers: false,
+      include_cashback: false,
+      include_credits: false,
+      currency_code: 'USD',
+      amount_limit: 100,
+      velocity_window: 'DAY',
+      active: false
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/velocitycontrols', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(velocityControlsData),
+    })
+      .then(response => response.json())
+      .then(velocityControlsData => {
+        this.setState({ velocityControlsDataToken: velocityControlsData.token });
+        console.log('Velocity Response:', velocityControlsData);
+        console.log('Velocity Token:', velocityControlsData.token);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 7 handler
+  handleFundUserAccount() {
+
+    const fundUserAccountData = {
+      user_token: "**TOKEN**",
+      amount: "100",
+      currency_code: "USD",
+      funding_source_token: "**TOKEN**"
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/gpaorders', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(fundUserAccountData),
+    })
+      .then(response => response.json())
+      .then(fundUserAccountData => {
+        this.setState({ fundUserAccountDataToken: fundUserAccountData.token });
+        console.log('Fund User Account Data Response:', fundUserAccountData);
+        console.log('Fund User Account Data Token:', fundUserAccountData.token);
+      })
       .catch((error) => {
         console.error('Error:', error);
       });
@@ -144,11 +390,12 @@ class App extends Component {
       <div className='App' >
         <h2>API steps to follow:</h2>
         <p>1. <button onClick={() => this.handleCreateCardProduct()}>Create card product definition</button></p>
-        <p>2. <button onClick={() => this.handleCreateProgramFundingResource()}>Create program funding resource</button></p>
-        <p>3. <button onClick={() => this.handleCreateUser()}>Create user</button></p>
-        <p>4. <button onClick={() => this.handleCreateVelocityControls()}>Create velocity controls</button></p>
-        <p>5. <button onClick={() => this.handleCreateCard()}>Create a card</button></p>
-        <p>6. <button onClick={() => this.handleCreateACHResource()}>Create an ACH resource</button></p>
+        <p>2. <button onClick={() => this.handleCreateMCCGroup()}>Create MCC group definition</button></p>
+        <p>3. <button onClick={() => this.handleCreateProgramFundingResource()}>Create program funding resource</button></p>
+        <p>4. <button onClick={() => this.handleCreateUser()}>Create user</button></p>
+        <p>5. <button onClick={() => this.handleCreateVelocityControls()}>Create velocity controls</button></p>
+        <p>6. <button onClick={() => this.handleCreateCard()}>Create a card</button></p>
+        <p>7. <button onClick={() => this.handleFundUserAccount()}>Fund user's account</button></p>
       </div>
     );
   }
