@@ -250,10 +250,10 @@ class App extends Component {
     const velocityControlsData = {
       name: 'google_facebook',
       association: {
-        card_product_token: this.cardProductToken
+        card_product_token: this.state.cardProductToken
       },
       merchant_scope: {
-        mcc_group: this.MCCGroupToken
+        mcc_group: this.state.MCCGroupToken
       },
       approvals_only: false,
       include_purchases: true,
@@ -291,13 +291,13 @@ class App extends Component {
   handleCreateCard() {
 
     const cardData = {
-      card_product_token: this.cardProductToken,
+      card_product_token: this.state.cardProductToken,
       expedite: false,
       expiration_offset: {
         unit: 'YEARS',
         value: 0
       },
-      user_token: this.userToken,
+      user_token: this.state.userToken,
       fulfillment: {
         shipping: {
           method: 'FEDEX_EXPEDITED',
@@ -359,10 +359,10 @@ class App extends Component {
   handleFundUserAccount() {
 
     const fundUserAccountData = {
-      user_token: this.userToken,
+      user_token: this.state.userToken,
       amount: '100',
       currency_code: 'USD',
-      funding_source_token: this.programFundingResourceToken
+      funding_source_token: this.state.programFundingResourceToken
     };
 
     fetch('https://sandbox-api.marqeta.com/v3/gpaorders', {
