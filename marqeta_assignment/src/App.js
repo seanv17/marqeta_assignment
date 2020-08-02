@@ -6,11 +6,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      cardProductData: null,
       cardProductToken: ''
     };
   }
 
-  createCardProduct() {
+  handleCreateCardProduct() {
 
     const cardProductData = {
       name: 'social_media_adspend',
@@ -142,12 +143,12 @@ class App extends Component {
     return (
       <div className='App' >
         <h2>API steps to follow:</h2>
-        <p>1. <button onClick={() => this.createCardProduct()}>Create card product definition</button></p>
-        <p>2. <button onClick={() => this.createProgramFundingResource()}>Create program funding resource</button></p>
-        <p>3. <button onClick={() => this.createUser()}>Create user</button></p>
-        <p>4. <button onClick={() => this.createVelocityControls()}>Create velocity controls</button></p>
-        <p>5. <button onClick={() => this.createCard()}>Create a card</button></p>
-        <p>6. <button onClick={() => this.createACHResource()}>Create an ACH resource</button></p>
+        <p>1. <button onClick={() => this.handleCreateCardProduct()}>Create card product definition</button></p>
+        <p>2. <button onClick={() => this.handleCreateProgramFundingResource()}>Create program funding resource</button></p>
+        <p>3. <button onClick={() => this.handleCreateUser()}>Create user</button></p>
+        <p>4. <button onClick={() => this.handleCreateVelocityControls()}>Create velocity controls</button></p>
+        <p>5. <button onClick={() => this.handleCreateCard()}>Create a card</button></p>
+        <p>6. <button onClick={() => this.handleCreateACHResource()}>Create an ACH resource</button></p>
       </div>
     );
   }
