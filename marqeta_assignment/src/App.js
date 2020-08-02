@@ -7,12 +7,12 @@ class App extends Component {
     super(props);
     this.state = {
       cardProductToken: '',
-      MCCGroupDataToken: '',
+      MCCGroupToken: '',
       programFundingResourceToken: '',
-      userDataToken: '',
-      cardDataToken: '',
-      velocityControlsDataToken: '',
-      fundUserAccountDataToken: ''
+      userToken: '',
+      cardToken: '',
+      velocityControlsToken: '',
+      fundUserAccountToken: ''
     };
   }
 
@@ -177,7 +177,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(MCCGroupData => {
-        this.setState({ MCCGroupDataToken: MCCGroupData.token });
+        this.setState({ MCCGroupToken: MCCGroupData.token });
         console.log('MCC Group Data Response:', MCCGroupData);
         console.log('MCC Group Data Token:', MCCGroupData.token);
 
@@ -205,7 +205,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(programFundingResourceData => {
-        this.setState({ cardProductToken: programFundingResourceData.token });
+        this.setState({ programFundingResourceToken: programFundingResourceData.token });
         console.log('Program Funding Resource Data Response:', programFundingResourceData);
         console.log('Program Funding Resource Data Token:', programFundingResourceData.token);
 
@@ -235,7 +235,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(userData => {
-        this.setState({ userDataToken: userData.token });
+        this.setState({ userToken: userData.token });
         console.log('User Data Response:', userData);
         console.log('User Data Token:', userData.token);
       })
@@ -245,16 +245,59 @@ class App extends Component {
   }
 
   // Step 5 handler
+  handleCreateVelocityControls() {
+
+    const velocityControlsData = {
+      name: 'google_facebook',
+      association: {
+        card_product_token: this.cardProductToken
+      },
+      merchant_scope: {
+        mcc_group: this.MCCGroupToken
+      },
+      approvals_only: false,
+      include_purchases: true,
+      include_withdrawals: false,
+      include_transfers: false,
+      include_cashback: false,
+      include_credits: false,
+      currency_code: 'USD',
+      amount_limit: 100,
+      velocity_window: 'DAY',
+      active: false
+    };
+
+    fetch('https://sandbox-api.marqeta.com/v3/velocitycontrols', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
+      },
+      body: JSON.stringify(velocityControlsData),
+    })
+      .then(response => response.json())
+      .then(velocityControlsData => {
+        this.setState({ velocityControlsToken: velocityControlsData.token });
+        console.log('Velocity Response:', velocityControlsData);
+        console.log('Velocity Token:', velocityControlsData.token);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Step 6 handler
   handleCreateCard() {
 
     const cardData = {
-      card_product_token: '**TOKEN**',
+      card_product_token: this.cardProductToken,
       expedite: false,
       expiration_offset: {
         unit: 'YEARS',
         value: 0
       },
-      user_token: '**TOKEN**',
+      user_token: this.userToken,
       fulfillment: {
         shipping: {
           method: 'FEDEX_EXPEDITED',
@@ -303,52 +346,9 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(cardData => {
-        this.setState({ cardDataToken: cardData.token });
+        this.setState({ cardToken: cardData.token });
         console.log('Card Data Response:', cardData);
         console.log('Card Data Token:', cardData.token);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
-
-  // Step 6 handler
-  handleCreateVelocityControls() {
-
-    const velocityControlsData = {
-      name: 'google_facebook',
-      association: {
-        card_product_token: '**TOKEN**'
-      },
-      merchant_scope: {
-        mcc_group: '**TOKEN**'
-      },
-      approvals_only: false,
-      include_purchases: true,
-      include_withdrawals: false,
-      include_transfers: false,
-      include_cashback: false,
-      include_credits: false,
-      currency_code: 'USD',
-      amount_limit: 100,
-      velocity_window: 'DAY',
-      active: false
-    };
-
-    fetch('https://sandbox-api.marqeta.com/v3/velocitycontrols', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa('49ebd492-d78a-43db-b2a0-78e2c9d25d01:2034b9a2-6947-4586-a8f3-816d44d316ec')
-      },
-      body: JSON.stringify(velocityControlsData),
-    })
-      .then(response => response.json())
-      .then(velocityControlsData => {
-        this.setState({ velocityControlsDataToken: velocityControlsData.token });
-        console.log('Velocity Response:', velocityControlsData);
-        console.log('Velocity Token:', velocityControlsData.token);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -359,10 +359,10 @@ class App extends Component {
   handleFundUserAccount() {
 
     const fundUserAccountData = {
-      user_token: "**TOKEN**",
-      amount: "100",
-      currency_code: "USD",
-      funding_source_token: "**TOKEN**"
+      user_token: this.userToken,
+      amount: '100',
+      currency_code: 'USD',
+      funding_source_token: this.programFundingResourceToken
     };
 
     fetch('https://sandbox-api.marqeta.com/v3/gpaorders', {
@@ -376,7 +376,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(fundUserAccountData => {
-        this.setState({ fundUserAccountDataToken: fundUserAccountData.token });
+        this.setState({ fundUserAccountToken: fundUserAccountData.token });
         console.log('Fund User Account Data Response:', fundUserAccountData);
         console.log('Fund User Account Data Token:', fundUserAccountData.token);
       })
